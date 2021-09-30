@@ -36,23 +36,6 @@ def create_viable_mask(slide_ob,Annotations,downsample_scale):
     mask = np.array(mask)
     mask = (mask == 1).astype(np.uint8)
     return mask
-def read_Aaron_annotations(xml_path):
-    root = ET.parse(xml_path)
-    Annotations={'viable':[],
-                'necrosis':[],
-                'stroma':[]}
-    for a in root.iter('Annotation'):
-        for r in a.iter('Region'):
-            Annotation = []
-            for v in r.iter('Vertex'):
-                Annotation.append((float(v.attrib['X']), float(v.attrib['Y'])))
-            if a.attrib['LineColor'] == '16711680' :
-                Annotations['viable'].append(Annotation)
-            elif a.attrib['LineColor'] == '255':
-                Annotations['necrosis'].append(Annotation)
-            elif a.attrib['LineColor'] == '65280' or a.attrib['LineColor'] == '1376057':
-                Annotations['stroma'].append(Annotation)
-    return Annotations
 
 def convert_cv_findContours(contours):
     contours_1 = []

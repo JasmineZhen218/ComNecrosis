@@ -18,6 +18,10 @@ def Train(model, Dataset_train, optimizer, scheduler, validation=False, Dataset_
     n_train = len(Dataset_train)
     split_train = 100
     indices_train = random.sample(list(range(n_train)),k=n_train)
+    Train_loss = []
+    Train_accuracy = []
+    Val_loss = []
+    Val_accuracy = []
     if validation:
         n_val = len(Dataset_val)
         indices_val = random.sample(list(range(n_val)),k=100)
@@ -26,14 +30,18 @@ def Train(model, Dataset_train, optimizer, scheduler, validation=False, Dataset_
         Dataloader_train = data_utils.DataLoader(Dataset_train, sampler = Sampler_train, batch_size = 1, shuffle = False)
         model.cuda()
         model, train_loss, train_accuracy = train(model, optimizer, Dataloader_train)
+        Train_loss.append(train_loss)
+        Train_accuracy.append(train_accuracy)
         scheduler.step()
         print("epoch={}/{}, train loss = {:.3f}, train_accuracy = {:.3f}".format(i, n_train//split_train, train_loss, train_accuracy))
         if validation:
             Sampler_val = torch.utils.data.sampler.SubsetRandomSampler(indices_val)
             Dataloader_val = data_utils.DataLoader(Dataset_val, sampler = Sampler_val, batch_size = 1, shuffle = False)
             val_loss, val_accuracy = val(model, Dataloader_val)
+            Val_loss.append(val_loss)
+            Val_accuracy.append(val_accuracy)
             print("epoch={}/{}, val loss = {:.3f}, val_accuracy = {:.3f}".format(i, n_train//split_train, val_loss, val_accuracy))
-    return model
+    return model, Train_Loss, Train_accuracy, Val_loss, Val_accuracy
             
 
 def create_dataset_mixbag(slides, tissue_masks, label_masks, num_bags, level, patch_shape,length_bag_mean = 10):
