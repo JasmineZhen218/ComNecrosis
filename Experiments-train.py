@@ -5,9 +5,10 @@
 #     - MIX patch: firstly mix all patches from 5 slides, and then pack bags
 #     - Magnification: 20x magnification
 #     - Training parameters: 
-#         - weight decay: 10e-5
+#         - weight decay: 10e-4
 #         - initial learning rate: 0.00005
 #         - weight decay to 0.2 every 100 bags
+key = 'mixpatch_x20_w4'
 
 import torch.optim as optim
 import xml.etree.ElementTree as ET
@@ -17,6 +18,7 @@ import matplotlib.pyplot as plt
 import pickle
 from auxillary import *
 from train import *
+
 
 unit = 256
 level = 1 # 20x magnification
@@ -82,7 +84,7 @@ if len(slides_val_ID)>0:
 #         ax[i][2].imshow(label_masks_val[slide_ID])
 
 model = Attention_modern_multi(load_vgg16(),True)
-optimizer = optim.Adam(model.parameters(),lr=0.00005, betas=(0.9, 0.999), weight_decay =10e-5)
+optimizer = optim.Adam(model.parameters(),lr=0.00005, betas=(0.9, 0.999), weight_decay =10e-4)
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size = 1, gamma = 0.2)
 
 Dataset_train = create_dataset_mixbag(slides_train,
@@ -98,7 +100,7 @@ else:
     
 
 # save model
-torch.save(model.state_dict(), '/cis/home/zwang/Data/ComNecrosis/Aaron/model_mixpatch_x20_w5.pth')
+torch.save(model.state_dict(), '/cis/home/zwang/Data/ComNecrosis/Aaron/model_'+key+'.pth')
 # Saving training process
 TP = {
     'Train_loss': Train_loss,
@@ -106,5 +108,5 @@ TP = {
     'Val_accuracy': Val_accuracy,
     'Val_loss':Val_loss
 }
-with open('/cis/home/zwang/Data/ComNecrosis/Aaron/TP_mixpatch_x20_w5.sav', 'wb') as handle:
+with open('/cis/home/zwang/Data/ComNecrosis/Aaron/TP_'+key+'.sav', 'wb') as handle:
     pickle.dump(TP, handle, protocol = pickle.HIGHEST_PROTOCOL)
