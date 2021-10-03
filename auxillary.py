@@ -4,6 +4,7 @@ import numpy as np
 import PIL.ImageDraw as ImageDraw
 import cv2 as cv
 from skimage import morphology
+import matplotlib.pyplot as plt
 def read_Aaron_annotations(xml_path):
     root = ET.parse(xml_path)
     Annotations={'viable':{'outer':[], 'inner':[]},
@@ -72,3 +73,5 @@ def write_annotation_0(contours,LineColor,root):
             Vertex.attrib = {'Z':'0','X':str(x),'Y':str(y)}
             Vertices.append(Vertex)
     root.append(new_Annotation)    
+
+
