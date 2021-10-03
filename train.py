@@ -41,7 +41,7 @@ def Train(model, Dataset_train, optimizer, scheduler, validation=False, Dataset_
             Val_loss.append(val_loss)
             Val_accuracy.append(val_accuracy)
             print("epoch={}/{}, val loss = {:.3f}, val_accuracy = {:.3f}".format(i, n_train//split_train, val_loss, val_accuracy))
-    return model, Train_Loss, Train_accuracy, Val_loss, Val_accuracy
+    return model, Train_loss, Train_accuracy, Val_loss, Val_accuracy
             
 
 def create_dataset_mixbag(slides, tissue_masks, label_masks, num_bags, level, patch_shape,length_bag_mean = 10):
