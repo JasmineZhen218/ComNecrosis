@@ -8,7 +8,7 @@
 #         - weight decay: 10e-4
 #         - initial learning rate: 0.00005
 #         - weight decay to 0.2 every 100 bags
-key = 'mixpatch_x10_w4'
+key = 'mixpatch_x20_w4'
 
 import torch.optim as optim
 import xml.etree.ElementTree as ET
@@ -21,7 +21,7 @@ from train import *
 
 
 unit = 256
-level = 2 # 10x magnification
+level = 1 # 20x magnification
 patch_shape = 256
 annotation_label_mapping ={
     'stroma':0,
@@ -87,11 +87,11 @@ model = Attention_modern_multi(load_vgg16(),True)
 optimizer = optim.Adam(model.parameters(),lr=0.00005, betas=(0.9, 0.999), weight_decay =10e-4)
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size = 1, gamma = 0.2)
 
-Dataset_train = create_dataset_mixpatch(slides_train,
+Dataset_train = create_dataset_mixbag(slides_train,
                                   tissue_masks_train, label_masks_train, 
                                   num_bags_train, level, patch_shape,length_bag_mean = 10)
 if len(slides_val)>0:
-    Dataset_val = create_dataset_mixpatch(slides_val,
+    Dataset_val = create_dataset_mixbag(slides_val,
                                   tissue_masks_val, label_masks_val, 
                                   num_bags_val, level, patch_shape,length_bag_mean = 10)
     model, Train_loss, Train_accuracy, Val_loss, Val_accuracy = Train(model, Dataset_train, optimizer, scheduler, validation=True, Dataset_val = Dataset_val)

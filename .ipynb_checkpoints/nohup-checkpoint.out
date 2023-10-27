@@ -1,0 +1,4 @@
+  File "Experiments.py", line 15
+    %matplotlib inline
+    ^
+SyntaxError: invalid syntax

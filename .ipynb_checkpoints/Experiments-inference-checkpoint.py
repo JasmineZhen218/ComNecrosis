@@ -8,15 +8,14 @@ Settings = {
     '16714507':{'adjust_otsu':1.18, 'num_bag_viable':833, 'num_bag_necrosis':625, 'num_bag_stroma':587}
 }
 
-# Inference, using model_mixpatch_x10_w5, for all 6 slides
-key = 'mixpatch_x10_w4'
+# Inference, using model_mixpatch_x20_w5, for all 6 slides
 Slide_IDs = ['16714495','16714498','16714499','16714503','16714505','16714507']
 unit = 256
-level = 2 # x10 magnification
+level = 1 # x20 magnification
 patch_shape = 256
 # load model
 model = Attention_modern_multi(load_vgg16())
-model.load_state_dict(torch.load('/cis/home/zwang/Data/ComNecrosis/Aaron/model_'+key+'.pth'))
+model.load_state_dict(torch.load('/cis/home/zwang/Data/ComNecrosis/Aaron/model_mixpatch_x20_w5.pth'))
 
 for slide_ID in Slide_IDs:
     # read slides
@@ -32,6 +31,6 @@ for slide_ID in Slide_IDs:
 #     plt.show()
     # Inference
     heatmap_stroma, heatmap_necrosis, heatmap_viable = inference(slide_ob, model, mask_tissue, level, patch_shape)
-    np.save('/cis/home/zwang/Data/ComNecrosis/Aaron/'+slide_ID+'/aggregate/heatmap_stroma_'+key+'.npy',heatmap_stroma)
-    np.save('/cis/home/zwang/Data/ComNecrosis/Aaron/'+slide_ID+'/aggregate/heatmap_necrosis_'+key+'.npy',heatmap_necrosis)
-    np.save('/cis/home/zwang/Data/ComNecrosis/Aaron/'+slide_ID+'/aggregate/heatmap_viable_'+key+'.npy',heatmap_viable)
+    np.save('/cis/home/zwang/Data/ComNecrosis/Aaron/'+slide_ID+'/aggregate/heatmap_stroma_mixpatch_20x_w5.npy',heatmap_stroma)
+    np.save('/cis/home/zwang/Data/ComNecrosis/Aaron/'+slide_ID+'/aggregate/heatmap_necrosis_mixpatch_20x_w5.npy',heatmap_necrosis)
+    np.save('/cis/home/zwang/Data/ComNecrosis/Aaron/'+slide_ID+'/aggregate/heatmap_viable_mixpatch_20x_w5.npy',heatmap_viable)
